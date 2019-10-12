@@ -1,4 +1,4 @@
-$(function(){
+$(function () {
 
     let localStream = null;
     let peer = null;
@@ -9,7 +9,7 @@ $(function(){
     let videoSelect = $('#videoSource');
 
     navigator.mediaDevices.enumerateDevices()
-        .then(function(deviceInfos) {
+        .then(function (deviceInfos) {
             for (let i = 0; i !== deviceInfos.length; ++i) {
                 let deviceInfo = deviceInfos[i];
                 let option = $('<option>');
@@ -35,50 +35,69 @@ $(function(){
         debug: 3
     });
 
-    peer.on('open', function(){
+    peer.on('open', function () {
         $('#my-id').text(peer.id);
     });
 
-    peer.on('error', function(err){
+    peer.on('error', function (err) {
         alert(err.message);
     });
 
-    $('#make-call').submit(function(e){
+    $('#make-call').submit(function (e) {
         e.preventDefault();
         let roomName = $('#join-room').val();
         if (!roomName) {
             return;
         }
-        const call = peer.joinRoom(roomName, {mode: 'sfu', stream: localStream});
+        const call = peer.joinRoom(roomName, {
+            mode: 'sfu',
+            stream: localStream
+        });
         setupCallEventHandlers(call);
     });
 
-    $('#end-call').click(function(){
+    $('#end-call').click(function () {
         existingCall.close();
     });
 
-    $('#recording button').click(function(){
-        if(recorder){
+    $('#recording button').click(function () {
+        if (recorder) {
+            console.log("button recorder");
             recorder.stop();
             $('#recording button').text('Recording');
             $('#downloadlink').hide();
-        }else if(remoteStream){
+        } else {
+            let recordStream;
+            if (remoteStream) {
+                console.log("button remoteStream");
+                console.log(remoteStream);
+                recordStream = remoteStream;
+            } else if (localStream) {
+                console.log("button localStream");
+                console.log(localStream);
+                recordStream = localStream;
+            } else {
+                return;
+            }
+
             let chunks = [];
             let options = {
-                mimeType : 'video/webm; codecs=vp9'
+                mimeType: 'video/webm; codecs=vp9'
             };
 
-            recorder = new MediaRecorder(remoteStream,options);
+            recorder = new MediaRecorder(recordStream, options);
 
-            recorder.ondataavailable = function(evt) {
+            recorder.ondataavailable = function (evt) {
                 console.log("data available: evt.data.type=" + evt.data.type + " size=" + evt.data.size);
                 chunks.push(evt.data);
             };
 
-            recorder.onstop = function(evt) {
+            recorder.onstop = function (evt) {
                 console.log('recorder.onstop(), so playback');
                 recorder = null;
-                const videoBlob = new Blob(chunks, { type: "video/webm" });
+                const videoBlob = new Blob(chunks, {
+                    type: "video/webm"
+                });
                 blobUrl = window.URL.createObjectURL(videoBlob);
                 $('#downloadlink').attr("download", 'recorded.webm');
                 $('#downloadlink').attr("href", blobUrl);
@@ -89,14 +108,24 @@ $(function(){
             $('#recording button').text('Stop');
             $('#downloadlink').hide();
         }
+
+        console.log("button");
     });
 
     function setupGetUserMedia() {
         let audioSource = $('#audioSource').val();
         let videoSource = $('#videoSource').val();
         let constraints = {
-            audio: {deviceId: {exact: audioSource}},
-            video: {deviceId: {exact: videoSource}}
+            audio: {
+                deviceId: {
+                    exact: audioSource
+                }
+            },
+            video: {
+                deviceId: {
+                    exact: videoSource
+                }
+            }
         };
         constraints.video.width = {
             min: 320,
@@ -107,7 +136,7 @@ $(function(){
             max: 240
         };
 
-        if(localStream){
+        if (localStream) {
             localStream = null;
         }
 
@@ -116,17 +145,17 @@ $(function(){
                 $('#myStream').get(0).srcObject = stream;
                 localStream = stream;
 
-                if(existingCall){
+                if (existingCall) {
                     existingCall.replaceStream(stream);
                 }
 
             }).catch(function (error) {
-            console.error('mediaDevice.getUserMedia() error:', error);
-            return;
-        });
+                console.error('mediaDevice.getUserMedia() error:', error);
+                return;
+            });
     }
 
-    function setupCallEventHandlers(call){
+    function setupCallEventHandlers(call) {
         if (existingCall) {
             existingCall.close();
         };
@@ -135,42 +164,42 @@ $(function(){
         setupEndCallUI();
         $('#room-id').text(call.name);
 
-        call.on('stream', function(stream){
+        call.on('stream', function (stream) {
             addVideo(stream);
             remoteStream = stream;
         });
 
-        call.on('removeStream', function(stream){
+        call.on('removeStream', function (stream) {
             removeVideo(stream.peerId);
         });
 
-        call.on('peerLeave', function(peerId){
+        call.on('peerLeave', function (peerId) {
             removeVideo(peerId);
         });
 
-        call.on('close', function(){
+        call.on('close', function () {
             removeAllRemoteVideos();
             setupMakeCallUI();
         });
 
     }
 
-    function addVideo(stream){
+    function addVideo(stream) {
         const videoDom = $('<video autoplay>');
-        videoDom.attr('id',stream.peerId);
+        videoDom.attr('id', stream.peerId);
         videoDom.get(0).srcObject = stream;
         $('.videosContainer').append(videoDom);
     }
 
-    function removeVideo(peerId){
-        $('#'+peerId).remove();
+    function removeVideo(peerId) {
+        $('#' + peerId).remove();
     }
 
-    function removeAllRemoteVideos(){
+    function removeAllRemoteVideos() {
         $('.videosContainer').empty();
     }
 
-    function setupMakeCallUI(){
+    function setupMakeCallUI() {
         $('#make-call').show();
         $('#end-call').hide();
         $('#recording').hide();

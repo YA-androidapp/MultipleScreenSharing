@@ -113,34 +113,23 @@ $(function () {
     });
 
     function setupGetUserMedia() {
-        let audioSource = $('#audioSource').val();
-        let videoSource = $('#videoSource').val();
         let constraints = {
-            audio: {
-                deviceId: {
-                    exact: audioSource
-                }
-            },
             video: {
-                deviceId: {
-                    exact: videoSource
-                }
+                width: screen.width,
+                height: screen.height,
+                // displaySurface: 'monitor', // monitor or window or application or browser
+                // logicalSurface: true,
+                frameRate: 30,
+                // aspectRatio: 1.77,
+                cursor: 'never', // always or never or motion
             }
-        };
-        constraints.video.width = {
-            min: 320,
-            max: 320
-        };
-        constraints.video.height = {
-            min: 240,
-            max: 240
         };
 
         if (localStream) {
             localStream = null;
         }
 
-        navigator.mediaDevices.getUserMedia(constraints)
+        navigator.mediaDevices.getDisplayMedia(constraints)
             .then(function (stream) {
                 $('#myStream').get(0).srcObject = stream;
                 localStream = stream;

@@ -3,22 +3,25 @@ html {
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
-    background-size: cover;  }
+    background-size: cover;
+}
 
 .videosContainer {
     position: absolute;
     width: 100%;
-    height: 50%;
+    height: 100%;
     left: 0;
-    top: 0; }
+    top: 0;
+}
 
 .myControllerContainer {
     position: absolute;
     width: 50%;
     height: 50%;
-    top: 50%;
+    top: 100%;
     padding-left: 20px;
-    color: white}
+    color: white
+}
 
 #my-id {
     font-weight: bold;
@@ -34,7 +37,8 @@ form {
     margin-bottom: 1em;
 }
 
-div #recording, div #end-call {
+div #recording,
+div #end-call {
     margin-top: 1em;
     margin-bottom: 1em;
 }
@@ -46,24 +50,26 @@ div #recording, div #end-call {
 #recording {
     display: none;
 }
+
 #downloadlink {
     display: none;
 }
 
-input[type=text]{
+input[type=text] {
     border-radius: 5px;
-    border:#a9a9a9 1px solid;
-    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2),0 0 2px rgba(0,0,0,0.3);
-    width:40%;
+    border: #a9a9a9 1px solid;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2), 0 0 2px rgba(0, 0, 0, 0.3);
+    width: 40%;
     font-size: 15px;
     padding: 5px;
 }
 
 input[type=text]:focus {
-    border:solid 1px #20b2aa;
+    border: solid 1px #20b2aa;
 }
 
-input[type=text], select {
+input[type=text],
+select {
     outline: none;
 }
 
@@ -94,41 +100,41 @@ video {
 }
 
 .videosContainer video:first-child:nth-last-child(1),
-.videosContainer video:first-child:nth-last-child(1) ~ video {
+.videosContainer video:first-child:nth-last-child(1)~video {
     width: 100%;
 }
 
 .videosContainer video:first-child:nth-last-child(2),
-.videosContainer video:first-child:nth-last-child(2) ~ video {
+.videosContainer video:first-child:nth-last-child(2)~video {
     width: 50%;
 }
 
 .videosContainer video:first-child:nth-last-child(3),
-.videosContainer video:first-child:nth-last-child(3) ~ video {
+.videosContainer video:first-child:nth-last-child(3)~video {
     width: 33.33333%;
 }
 
 .videosContainer video:first-child:nth-last-child(4),
-.videosContainer video:first-child:nth-last-child(4) ~ video {
+.videosContainer video:first-child:nth-last-child(4)~video {
     width: 25%;
 }
 
 .videosContainer video:first-child:nth-last-child(5),
-.videosContainer video:first-child:nth-last-child(5) ~ video {
+.videosContainer video:first-child:nth-last-child(5)~video {
     width: 20%;
 }
 
 .videosContainer video:first-child:nth-last-child(6),
-.videosContainer video:first-child:nth-last-child(6) ~ video {
+.videosContainer video:first-child:nth-last-child(6)~video {
     width: 16.66667%;
 }
 
 .videosContainer video:first-child:nth-last-child(7),
-.videosContainer video:first-child:nth-last-child(7) ~ video {
+.videosContainer video:first-child:nth-last-child(7)~video {
     width: 14.28571%;
 }
 
 .videosContainer video:first-child:nth-last-child(8),
-.videosContainer video:first-child:nth-last-child(8) ~ video {
+.videosContainer video:first-child:nth-last-child(8)~video {
     width: 12.5%;
 }

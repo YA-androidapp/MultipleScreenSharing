@@ -5,30 +5,6 @@ $(function () {
     let existingCall = null;
     let remoteStream = null;
     let recorder = null;
-    let audioSelect = $('#audioSource');
-    let videoSelect = $('#videoSource');
-
-    navigator.mediaDevices.enumerateDevices()
-        .then(function (deviceInfos) {
-            for (let i = 0; i !== deviceInfos.length; ++i) {
-                let deviceInfo = deviceInfos[i];
-                let option = $('<option>');
-                option.val(deviceInfo.deviceId);
-                if (deviceInfo.kind === 'audioinput') {
-                    option.text(deviceInfo.label);
-                    audioSelect.append(option);
-                } else if (deviceInfo.kind === 'videoinput') {
-                    option.text(deviceInfo.label);
-                    videoSelect.append(option);
-                }
-            }
-            videoSelect.on('change', setupGetUserMedia);
-            audioSelect.on('change', setupGetUserMedia);
-            setupGetUserMedia();
-        }).catch(function (error) {
-            console.error('mediaDevices.enumerateDevices() error:', error);
-            return;
-        });
 
     peer = new Peer({
         key: 'f9613972-35ff-4555-a212-ef68d10cdf71',
@@ -45,6 +21,8 @@ $(function () {
 
     $('#make-call').submit(function (e) {
         e.preventDefault();
+        setupGetUserMedia();
+
         let roomName = $('#join-room').val();
         if (!roomName) {
             return;
